@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
-import { AuthContext } from "../auth/AuthContext";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { House } from "lucide-react";
 
 const Signup = () => {
-  const { signup } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -23,7 +23,12 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      await signup(form);
+
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/sign-up`,
+        form
+      );
+
       setSuccess("Account created successfully! Redirecting to login...");
       setForm({ name: "", email: "", password: "" });
 
@@ -36,19 +41,28 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-blue-100">
-      <form
-        onSubmit={submit}
-        className="bg-white w-full max-w-md p-8 rounded-xl shadow-lg"
-      >
-        <h2 className="text-2xl font-bold text-gray-800 text-center mb-2">
-          Create Account 🚀
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-blue-100 p-4">
+      <form className="relative bg-white w-full max-w-md p-8 rounded-xl shadow-lg">
+
+        <div
+          onClick={() => navigate("/")}
+          className="absolute top-4 left-4 cursor-pointer p-2 rounded-full 
+             bg-blue-50 text-blue-600 
+             hover:bg-blue-600 hover:text-white 
+             transition-all duration-200 shadow-sm"
+          title="Go to Home"
+        >
+          <House size={20} />
+        </div>
+
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
+          Create Account
         </h2>
         <p className="text-sm text-gray-500 text-center mb-6">
           Sign up to get started
         </p>
 
-       
+        {/* Full Name */}
         <div className="mb-4">
           <label className="text-sm text-gray-600 block mb-1">
             Full Name
@@ -63,7 +77,7 @@ const Signup = () => {
           />
         </div>
 
-    
+        {/* Email */}
         <div className="mb-4">
           <label className="text-sm text-gray-600 block mb-1">
             Email
@@ -78,7 +92,7 @@ const Signup = () => {
           />
         </div>
 
-     
+        {/* Password */}
         <div className="mb-4">
           <label className="text-sm text-gray-600 block mb-1">
             Password
@@ -93,35 +107,35 @@ const Signup = () => {
           />
         </div>
 
-        
+        {/* Error */}
         {error && (
           <div className="bg-red-50 text-red-600 text-sm p-2 rounded mb-4">
             {error}
           </div>
         )}
 
-      
+        {/* Success */}
         {success && (
           <div className="bg-green-50 text-green-600 text-sm p-2 rounded mb-4">
             {success}
           </div>
         )}
 
-     
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
           className={`w-full py-2 rounded-lg font-semibold transition
-            ${
-              loading
-                ? "bg-gray-300 cursor-not-allowed text-gray-600"
-                : "bg-blue-600 hover:bg-blue-700 text-white"
+            ${loading
+              ? "bg-gray-300 cursor-not-allowed text-gray-600"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
             }
           `}
         >
           {loading ? "Creating account..." : "Sign Up"}
         </button>
 
+        {/* Login Redirect */}
         <p className="text-sm text-gray-500 text-center mt-4">
           Already have an account?{" "}
           <span

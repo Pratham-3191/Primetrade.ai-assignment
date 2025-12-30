@@ -5,7 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const authRoutes = require("./routes/auth.routes");
-const resumeRoutes = require("./routes/resume.routes");
+const taskRoutes = require("./routes/task.routes");
 
 dotenv.config();
 
@@ -24,9 +24,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-app.use("/api/auth", authRoutes);
-app.use("/api/resumes", resumeRoutes);
+app.use("/auth", authRoutes);
+app.use("/tasks", taskRoutes);
 
+app.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+    });
+});
 
 app.get("/", (req, res) => {
   res.send("Resume API is running 🚀");

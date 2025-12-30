@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Resume API is running 🚀");
+  res.send(" API is running ");
 });
 
 const connectDB = async () => {
